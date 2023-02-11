@@ -1,24 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 function App() {
+  let [productName, setProductName] = React.useState<string>('');
+
+  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      let url = tabs[0].url;
+      console.log(url);
+      // use `url` here inside the callback because it's asynchronous!
+      setProductName((url?.split('?')[1].split('&')[0].split('=')[1].split('+'))?.join(' ') ?? 'No product name found')
+  });
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="display-1 text-center">RegionSell</h1>
+      <h2 className="display-4 text-center">Product: {productName}</h2>
     </div>
   );
 }
