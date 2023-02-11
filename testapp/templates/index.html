@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Storefront</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body class="p-3">
+    <h1 class="text-center display-1">Our Incredible Storefront</h1>
+    <p class="lead text-center">Our Incredible Storefront is a test storefront for testing purposes.</p>
+    <p>Here are the items you can buy:</p>
+    <ul>
+        {% for item in items %}
+            <li>
+                <a href="{{ url_for('item', item_id=item.itemname, item_price=item.price) }}">{{ item.itemname }}</a> - {{ item.price }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
