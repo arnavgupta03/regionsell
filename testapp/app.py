@@ -92,4 +92,4 @@ def item():
     return render_template('item.html', item_name=item_id, item_price=item_price)
 
 if __name__ == '__main__':
-    app.run(debug = True, port=5001)
+    app.run(port=5001)
