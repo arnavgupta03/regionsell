@@ -1,6 +1,7 @@
+"""Server for application to classify text and clean data."""
+import csv
+import cohere
 from flask import Flask
-import csv, cohere
-from cohere.classify import Example
 
 app = Flask(__name__)
 
@@ -8,24 +9,29 @@ co = cohere.Client("mEMtAFSaV4qHTLRi7mLIkEqLfMxS9GJqHq0v54WM")
 
 app.config['SECRET_KEY'] = 'P+A4EHVAH'
 
+"""Reads data from csv file and returns a list of dictionaries after writing to csv file."""
 def read_data_file():
     rows = []
-    with open("data.csv", newline='') as csvfile:
+    with open("data.csv", newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            rows.append({"example": row["Description"] + " " + row["InvoiceDate"], "label": row["Country"]})
+            rows.append({
+                "example": row["Description"] + " " + row["InvoiceDate"],
+                "label": row["Country"]
+            })
 
     ukrows = list(filter(lambda x: (x["label"] == 'United Kingdom'), rows))
     rows = list(filter(lambda x: (x["label"] != 'United Kingdom'), rows))
     rows.extend(ukrows[:9500])
 
-    with open("examples.csv", 'w', newline='') as csvfile:
+    with open("examples.csv", 'w', newline='', encoding="utf-8") as csvfile:
         fieldnames = ["example", "label"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writerows(rows)
     return rows
 
+"""Classifies text and returns a response."""
 @app.route('/')
 def home():
     examples = read_data_file()
