@@ -1,11 +1,15 @@
 """Server for application to classify text and clean data."""
 import csv
 import cohere
+import os
+from dotenv import load_dotenv
 from flask import Flask
 
 app = Flask(__name__)
 
-co = cohere.Client("mEMtAFSaV4qHTLRi7mLIkEqLfMxS9GJqHq0v54WM")
+load_dotenv()
+
+co = cohere.Client(os.environ.get("COHERE_API_KEY"))
 
 app.config['SECRET_KEY'] = 'P+A4EHVAH'
 
