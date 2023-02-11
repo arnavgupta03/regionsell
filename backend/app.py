@@ -9,8 +9,8 @@ co = cohere.Client("mEMtAFSaV4qHTLRi7mLIkEqLfMxS9GJqHq0v54WM")
 
 app.config['SECRET_KEY'] = 'P+A4EHVAH'
 
-"""Reads data from csv file and returns a list of dictionaries after writing to csv file."""
 def read_data_file():
+    """Reads data from csv file and returns a list of dictionaries after writing to csv file."""
     rows = []
     with open("data.csv", newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
@@ -31,9 +31,9 @@ def read_data_file():
         writer.writerows(rows)
     return rows
 
-"""Classifies text and returns a response."""
 @app.route('/')
 def home():
+    """Classifies text and returns a response."""
     examples = read_data_file()
     response = co.classify(
         inputs=["DOORMAT FANCY FONT HOME SWEET HOME 2/11/2023 2:55"],
