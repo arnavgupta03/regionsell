@@ -1,7 +1,7 @@
 """Server for application to classify text and clean data."""
+import os
 import csv
 import cohere
-import os
 from dotenv import load_dotenv
 from flask import Flask
 
