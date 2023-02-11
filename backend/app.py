@@ -1,0 +1,41 @@
+from flask import Flask
+import csv, cohere
+from cohere.classify import Example
+
+app = Flask(__name__)
+
+co = cohere.Client("mEMtAFSaV4qHTLRi7mLIkEqLfMxS9GJqHq0v54WM")
+
+app.config['SECRET_KEY'] = 'P+A4EHVAH'
+
+def read_data_file():
+    rows = []
+    with open("data.csv", newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            rows.append({"example": row["Description"] + " " + row["InvoiceDate"], "label": row["Country"]})
+
+    ukrows = list(filter(lambda x: (x["label"] == 'United Kingdom'), rows))
+    rows = list(filter(lambda x: (x["label"] != 'United Kingdom'), rows))
+    rows.extend(ukrows[:9500])
+
+    with open("examples.csv", 'w', newline='') as csvfile:
+        fieldnames = ["example", "label"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writerows(rows)
+    return rows
+
+@app.route('/')
+def home():
+    examples = read_data_file()
+    response = co.classify(
+        inputs=["DOORMAT FANCY FONT HOME SWEET HOME 2/11/2023 2:55"],
+        examples=examples,
+        model="large",
+        truncate="END"
+    )
+    return {"response": response}
+
+if __name__ == '__main__':
+    app.run(debug = True)
