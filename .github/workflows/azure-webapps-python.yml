@@ -60,6 +60,8 @@ jobs:
           name: python-app
           path: |
             ./backend/
+            !./backend/data.csv
+            !./backend/examples.csv
             !venv/
 
   deploy:
@@ -76,7 +78,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: ./backend/
+          path: .
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
