@@ -2,16 +2,19 @@
 import os
 import csv
 import cohere
+from datetime import datetime
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 load_dotenv()
 
 co = cohere.Client(os.environ.get("COHERE_API_KEY"))
 
-app.config['SECRET_KEY'] = 'P+A4EHVAH'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 def read_data_file():
     """Reads data from csv file and returns a list of dictionaries after writing to csv file."""
@@ -38,14 +41,16 @@ def read_data_file():
 @app.route('/')
 def home():
     """Classifies text and returns a response."""
-    examples = read_data_file()
+    # get the item query parameter from the url
+    item = request.args.get('item')
+    # get the current date and time
+    current_date = datetime.now().strftime("%m/%d/%Y %H:%M")
     response = co.classify(
-        inputs=["DOORMAT FANCY FONT HOME SWEET HOME 2/11/2023 2:55"],
-        examples=examples,
-        model="large",
+        inputs=[item + " " + current_date],
+        model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
         truncate="END"
     )
-    return {"response": response}
+    return [{"label": item[0], "value": item[1][0]} for item in sorted(response.classifications[0].labels.items(), key=lambda x: x[1], reverse=True)]
 
 if __name__ == '__main__':
     app.run(debug = True)
