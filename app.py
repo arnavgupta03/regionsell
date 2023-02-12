@@ -6,9 +6,13 @@ import cohere
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from cohere.classify import Example
 
 app = Flask(__name__)
-CORS(app, resources={r"/?*": {"origins": "*"}})
+CORS(app, resources={
+        r"/?*": {"origins": "*"},
+        r"/add_to_cart?*": {"origins": "*"}
+    })
 
 load_dotenv()
 
@@ -45,11 +49,28 @@ def home():
     item = request.args.get('item')
     # get the current date and time
     current_date = datetime.now().strftime("%m/%d/%Y %H:%M")
-    response = co.classify(
-        inputs=[item + " " + current_date],
-        model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
-        truncate="END"
-    )
+    new_examples = []
+    # read lines from new_examples.csv
+    with open("new_examples.csv", newline='', encoding="utf-8") as csvfile:
+        fieldnames = ["Name", "Country"]
+        reader = csv.DictReader(csvfile, fieldnames=fieldnames)
+        for row in reader:
+            new_examples.append(Example(row["Name"] + " " + current_date, row["Country"]))
+
+    just_labels = [x.label for x in new_examples]
+    if all(just_labels.count(x) > 2 for x in just_labels):
+        response = co.classify(
+            inputs=[item + " " + current_date],
+            model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
+            examples=new_examples,
+            truncate="END"
+        )
+    else:
+        response = co.classify(
+            inputs=[item + " " + current_date],
+            model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
+            truncate="END"
+        )
     response = jsonify([
         {
             "label": item[0],
@@ -62,6 +83,21 @@ def home():
         ])
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
+@app.route('/add_to_cart')
+def add_to_cart():
+    """Add item to new examples to train on."""
+    # append item name and country to csv file
+    item = request.args.get('item_name')
+    country = request.args.get('location')
+    with open("new_examples.csv", 'a', newline='', encoding="utf-8") as csvfile:
+        fieldnames = ["Name", "Country"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow({
+            "Name": item,
+            "Country": country
+        })
+    return {"Success": True}
 
 if __name__ == '__main__':
     app.run(debug = True)

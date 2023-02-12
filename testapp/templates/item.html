@@ -7,5 +7,10 @@
     <body class="p-3">
         <h1 class="text-center display-3">{{ item_name }}</h1>
         <p class="lead text-center">Price: {{ item_price }}</p>
+        <form action="/add_to_cart" method="POST">
+            <input type="hidden" name="item_name" value="{{ item_name }}">
+            <input type="hidden" name="item_price" value="{{ item_price }}">
+            <button class="btn btn-primary btn-lg d-block mx-auto">Add to Cart</button>
+        </form>
     </body>
 </html>

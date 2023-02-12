@@ -1,6 +1,7 @@
 """This is the basic test application to test the Chrome extension."""
 # Path: testapp\app.py
-from flask import Flask, render_template, request
+import requests
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -90,6 +91,15 @@ def item():
     item_id = request.args.get('item_id')
     item_price = request.args.get('item_price')
     return render_template('item.html', item_name=item_id, item_price=item_price)
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    """Sends a request to another API that an item has been bought from Canada."""
+    item_name = request.form.get('item_name')
+    item_price = request.form.get('item_price')
+    requests.get('http://localhost:5000/add_to_cart?item_name={}&location=Canada'.format(item_name))
+    print("the last thing happened")
+    return redirect(url_for('item', item_id=item_name, item_price=item_price))
 
 if __name__ == '__main__':
     app.run(port=5001)

@@ -23,7 +23,7 @@ function App() {
           });
         }
     });
-  }, [productName, suggestedList]);
+  }, [productName]);
   return (
     <div className="App p-3">
       <h1 className="display-1 text-center">RegionSell</h1>
