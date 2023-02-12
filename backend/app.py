@@ -1,8 +1,8 @@
 """Server for application to classify text and clean data."""
 import os
 import csv
-import cohere
 from datetime import datetime
+import cohere
 from dotenv import load_dotenv
 from flask import Flask, request
 from flask_cors import CORS
@@ -50,7 +50,16 @@ def home():
         model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
         truncate="END"
     )
-    return [{"label": item[0], "value": item[1][0]} for item in sorted(response.classifications[0].labels.items(), key=lambda x: x[1], reverse=True)]
+    return [
+        {
+            "label": item[0],
+            "value": item[1][0]
+        }
+        for item in sorted(
+            response.classifications[0].labels.items(),
+            key=lambda x: x[1],
+            reverse=True)
+        ]
 
 if __name__ == '__main__':
     app.run(debug = True)
