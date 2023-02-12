@@ -90,7 +90,7 @@ def item():
     # get item name from url query params
     item_id = request.args.get('item_id')
     item_price = request.args.get('item_price')
-    return render_template('item.html', item_name=item_id, item_price=item_price)
+    return render_template('item.html', item_name=item_id.title(), item_price=item_price)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():

@@ -26,19 +26,22 @@ function App() {
   }, [productName]);
   return (
     <div className="App p-3">
-      <h1 className="display-1 text-center">RegionSell</h1>
-      <h2 className="display-4 text-center">Product: {
+      <h1 className="shadow p-3 mb-5 bg-body rounded text-center">RegionSell</h1>
+      <h3 className="text-center">Product: {
       productName.toLowerCase()
         .split(' ')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ')
-      }</h2>
-      <h3 className="lead text-center">Suggested Places to Sell this Product</h3>
-      <ul>
+      }</h3>
+      <h3 className="lead">Here's some suggested Places to Sell this Product</h3>
+      <ul className="list-group">
         {suggestedList.map((suggestion, index) => {
-          return <li key={index}>{suggestion.label}</li>;
+          return <li key={index} className="list-group-item">{suggestion.label}</li>;
         })}
       </ul>
+      <button className="btn btn-primary mt-3" onClick={() => {
+        setSuggestedList([...suggestedList.slice(0, 3), {label: "Canada", value: 0}, suggestedList[3]]);
+      }}>Check for New Updates</button>
     </div>
   );
 }
