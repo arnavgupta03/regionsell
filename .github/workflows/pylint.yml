@@ -21,6 +21,7 @@ jobs:
         pip install flask
         pip install cohere
         pip install python-dotenv
+        pip install flask-cors
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')

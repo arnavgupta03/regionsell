@@ -4,9 +4,11 @@ import csv
 from datetime import datetime
 import cohere
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 load_dotenv()
 
@@ -48,7 +50,7 @@ def home():
         model="a6da86a1-2683-4abe-8c2c-454b0aa4385d-ft",
         truncate="END"
     )
-    return [
+    response = jsonify([
         {
             "label": item[0],
             "value": item[1][0]
@@ -57,7 +59,9 @@ def home():
             response.classifications[0].labels.items(),
             key=lambda x: x[1],
             reverse=True)
-        ]
+        ])
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == '__main__':
     app.run(debug = True)
