@@ -9,7 +9,7 @@ With RegionSell, all sorts of businesses can begin to predict where and when sal
 
 ## How to use it
 
-The API is hosted [here](https://regionsell.azurewebsites.net/). These are the endpoints you can use with it:
+The API is hosted [here](https://regionsell.azurewebsites.net/) on Azure App Service. These are the endpoints you can use with it:
 | Endpoint | Description |
 | -------- | ----------- |
 | ```/?item={item}``` | Uses the custom Cohere classification model to classify the given item into different countries and returns the list. |
@@ -20,6 +20,7 @@ To run the Chrome extension, you will need:
 - Yarn
 - Node.js
 - Google Chrome
+
 The Chrome extension can be built with ```yarn run build``` when inside the frontend folder, which creates the build folder, and then choosing the 'Load Unpacked' option in Chrome extensions and choosing the build folder.
 
 ### Built with
