@@ -97,8 +97,7 @@ def add_to_cart():
     """Sends a request to another API that an item has been bought from Canada."""
     item_name = request.form.get('item_name')
     item_price = request.form.get('item_price')
-    requests.get('http://localhost:5000/add_to_cart?item_name={}&location=Canada'.format(item_name))
-    print("the last thing happened")
+    requests.get(f'http://localhost:5000/add_to_cart?item_name={item_name}&location=Canada', timeout=60)
     return redirect(url_for('item', item_id=item_name, item_price=item_price))
 
 if __name__ == '__main__':

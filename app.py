@@ -100,4 +100,4 @@ def add_to_cart():
     return {"Success": True}
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
