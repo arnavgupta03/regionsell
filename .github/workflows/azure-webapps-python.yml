@@ -22,6 +22,7 @@ name: Build and deploy Python app to Azure Web App
 env:
   AZURE_WEBAPP_NAME: regionsell  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.9'              # set this to the Python version to use
+  WORKING_DIRECTORY: './backend'
 
 on:
   push:
@@ -59,9 +60,8 @@ jobs:
         with:
           name: python-app
           path: |
-            ./backend/
-            !./backend/data.csv
-            !./backend/examples.csv
+            !./data.csv
+            !./examples.csv
             !venv/
 
   deploy:
