@@ -1,2 +1,5 @@
 /env
 .env
+.python_packages
+__pycache__
+.vscode
