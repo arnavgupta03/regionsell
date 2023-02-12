@@ -1,6 +1,6 @@
 # RegionSell
 
-<p align="center">
+<p>
   <a href="https://regionsell.azurewebsites.net/?item=something"><img src="https://betteruptime.com/status-badges/v1/monitor/a9kf.svg" alt="Uptime"></a>
   <a href="https://github.com/arnavgupta03/regionsell/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-purple" alt="License"></a>
 </p>
