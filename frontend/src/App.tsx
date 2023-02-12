@@ -9,15 +9,19 @@ function App() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         let url = tabs[0].url;
         console.log(url);
-        // use `url` here inside the callback because it's asynchronous!
-        setProductName((url?.split('?')[1].split('&')[0].split('=')[1].split('+'))?.join(' ') ?? 'No product name found')
-        // call home endpoint of flask api passing product name as query param
-        fetch(`http://localhost:5000/?item=${productName}`).then((response) => {
-          return response.json();
-        }).then((data) => {
-          console.log(data.slice(0, 5));
-          setSuggestedList(data.slice(0, 5));
-        });
+        if (url != null) {
+          // use `url` here inside the callback because it's asynchronous!
+          setProductName((url?.split('?')[1].split('&')[0].split('=')[1].split('+'))?.join(' ') ?? 'No product name found')
+          // call home endpoint of flask api passing product name as query param
+          let query_url = `https://regionsell.azurewebsites.net/?item=${productName}`;
+          console.log(query_url);
+          fetch(query_url).then((response) => {
+            return response.json();
+          }).then((data) => {
+            console.log(data.slice(0, 5));
+            setSuggestedList(data.slice(0, 5));
+          });
+        }
     });
   }, [productName, suggestedList]);
   return (
