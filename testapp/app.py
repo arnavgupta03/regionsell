@@ -98,7 +98,7 @@ def add_to_cart():
     item_name = request.form.get('item_name')
     item_price = request.form.get('item_price')
     requests.get(
-        f'http://localhost:5000/add_to_cart?item_name={item_name}&location=Canada',
+        f'https://regionsell.azurewebsites.net/add_to_cart?item_name={item_name}&location=Canada',
         timeout=60
     )
     return redirect(url_for('item', item_id=item_name, item_price=item_price))
